@@ -1,0 +1,9 @@
+HereWeGoAgain
+
+int varb
+StayHere ( vara )  # vara is not declared
+varb = varb + vara
+varb = varb * 5
+ShowMe ( varb )
+ShowMe ( varb // vara ) # // operator is not defined
+PainEndsHere 0

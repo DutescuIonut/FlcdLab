@@ -1,0 +1,10 @@
+HereWeGoAgain
+int varFirstNum
+int vari
+StayHere ( varFirstNum )
+for ( vari = 2 ; vari <= varFirstNum / 2 ; vari = vari + 1 )
+    if ( varFirstNum % vari == 0 )
+        ShowMe ( "The number enter is not prime!" )
+        PainEndsHere 0
+ShowMe ( "The number entered is prime!" )
+PainEndsHere 0

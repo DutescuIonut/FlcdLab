@@ -1,0 +1,9 @@
+Constants table starts here:
+2: 0
+"The number enter is not prime!": 3
+1: 1
+0: 2
+"The number entered is prime!": 4
+Identifiers table starts here:
+vari: 1
+varFirstNum: 0

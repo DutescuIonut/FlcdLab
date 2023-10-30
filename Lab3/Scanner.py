@@ -17,9 +17,11 @@ class Scanner:
 
     def readFile(self):
         fileContent = ""
+
         # Open the file for reading
         with open(self.filePath, 'r') as file:
            for line in file:
+
                # Add file lines to fileContent
                fileContent = fileContent + line.strip() + "\n"
 
@@ -27,6 +29,7 @@ class Scanner:
 
     def getProgramTokens(self):
         try:
+
             content = self.readFile()
             # Initialize variables to store tokens
             tokens = []
@@ -54,9 +57,8 @@ class Scanner:
             # If there's any remaining word after processing the content
             if local_word:
                 tokens.append(local_word)
-
             # Filter out '\n' strings
-            tokens = [token for token in tokens if token != '\n']
+            #tokens = [token for token in tokens if token != '\n']
 
             return tokens
 
@@ -67,27 +69,35 @@ class Scanner:
 
     def scan(self):
         tokens = self.getProgramTokens()
-        lexical_error_exists = False
-        print(tokens)
+        counter = 1
         if tokens is None:
             return
-
         for t in tokens:
             token = t
-            if token in self.reservedWords:
-                self.pifOutput.append([token, "0"])
+            if token == "\n":
+                counter += 1
+            elif token in self.reservedWords:
+                newIndex = self.find_token_index(token)
+                self.pifOutput.append([newIndex,  "0"])
             elif token in self.operators:
-                self.pifOutput.append([token, "0"])
+                newIndex = self.find_token_index(token)
+                self.pifOutput.append([newIndex, "0" ])
+
             elif token in self.separators:
-                self.pifOutput.append([token, "0"])
+                newIndex = self.find_token_index(token)
+                self.pifOutput.append([newIndex, "0"])
+
             elif re.match(r'^(0|[-+]?[1-9][0-9]*|\'[1-9]\'|\'[a-zA-Z]\'|\"[0-9]*[a-zA-Z ]*\"|".*\s*")$', token):
-                self.constantST.insert(token, self.constantST.__len__())
-                self.pifOutput.append([token, self.constantST.search(token)])
+                if self.constantST.search(token) == -2:
+                    self.constantST.insert(token, self.constantST.__len__())
+                self.pifOutput.append([token, self.constantST.getPositionPair(token)])
             elif re.match(r'^var[a-zA-Z][a-zA-Z0-9]*$', token):
-                self.identifiersST.insert(token, self.identifiersST.__len__())
-                self.pifOutput.append([token, self.identifiersST.search(token)])
+                if self.identifiersST.search(token) == -2:
+                    self.identifiersST.insert(token, self.identifiersST.__len__())
+
+                self.pifOutput.append([token, self.identifiersST.getPositionPair(token)])
             else:
-                print(f"Invalid token: {token}")
+                print(f"Invalid token: {token} on line {counter}")
                 lexical_error_exists = True
                 if not lexical_error_exists:
                     print("Program is lexically correct!")
@@ -106,6 +116,14 @@ class Scanner:
         tokens.append((12, ' '))
 
         return tokens
+
+    def find_token_index(self, target_token):
+        with open('token.in', 'r') as file:
+            for line in file:
+                line = line.strip()
+                if target_token in line:
+                    index = line.split()
+                    return index[0]
 
     def get_pif(self):
         return self.pifOutput

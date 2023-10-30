@@ -13,6 +13,16 @@ class HashTable:
         self.size = 0
         self.table = [None] * capacity
 
+    def toString(self):
+        elements = []
+        for index in range(self.capacity):
+            current = self.table[index]
+            while current:
+                elements.append(f"{current.key}: {current.value}")
+                current = current.next
+
+        return elements
+    
     def _hash(self, key):
         return hash(key) % self.capacity
 
@@ -41,12 +51,27 @@ class HashTable:
         # WC: O(n) - have to parse the whole linked list to find the element
         index = self._hash(key)
         current = self.table[index]
+
         while current:
             if current.key == key:
                 return current.value
             current = current.next
 
-        raise KeyError(key)
+        return -2
+
+    def getPositionPair(self, key):
+        # BC: O(1) - the element is the head of the list
+        # WC: O(n) - have to parse the whole linked list to find the element
+        index = self._hash(key)
+        current = self.table[index]
+        columnIndex = -1
+        while current:
+            columnIndex += 1
+            if current.key == key:
+                return (index,columnIndex)
+            current = current.next
+
+        return -2
 
     def remove(self, key):
         # BC: O(1) - the element is the head of the list
@@ -113,6 +138,9 @@ class ConstantsSymbolTable(HashTable):
 
     def remove(self, key):
         super().remove(key)
+        
+    def toString(self):
+        return super(ConstantsSymbolTable, self).toString()
 
 
 class IdentifiersSymbolTable(HashTable):
@@ -132,6 +160,9 @@ class IdentifiersSymbolTable(HashTable):
 
     def remove(self, key):
         super().remove(key)
+    
+    def toString(self):
+       return super(IdentifiersSymbolTable, self).toString()
 
 # Average time complexity is O(1) for all operations assuming there is a good hashing function
 # that minimizes collisions as much as possible.

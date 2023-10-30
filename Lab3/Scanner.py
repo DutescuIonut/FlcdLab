@@ -1,17 +1,18 @@
 from Lab2.Lab2 import ConstantsSymbolTable,IdentifiersSymbolTable
-from Lab3.ProgramInternalForm import ProgramInternalForm
+
 import re
 
 class Scanner:
 
     def __init__(self, filepath):
         self.operators = ["+", "-", "*", "/", "%", "<=", ">=", "==", "!=", "<", ">", "="]
-        self.separators = ["[", "]", "{", "}", "(", ")", ":", ";", ",", " ", "\n", ",", "\t"]
+        self.separators = ["[", "]", "{", "}", "(", ")", ":", ";", ",", " ", "\n", ",", "\t", "\""]
         self.reservedWords = ["array", "char", "const", "do", "else",  "if", "int", "of", "program", "string", "for", "while", "then", "var", "while",
                               "and", "or", "HereWeGoAgain", "PainEndsHere", "ShowMe", "StayHere"]
         self.constantST = ConstantsSymbolTable(200)
         self.identifiersST = IdentifiersSymbolTable(200)
-        self.pif = ProgramInternalForm
+        self.pifOutput = []
+        self.allTokens = self.read_possible_tokens()
         self.filePath = filepath
 
     def readFile(self):
@@ -21,96 +22,93 @@ class Scanner:
            for line in file:
                # Add file lines to fileContent
                fileContent = fileContent + line.strip() + "\n"
+
         return fileContent
 
-    def createListOfProgramElems(self):
+    def getProgramTokens(self):
         try:
             content = self.readFile()
-            separatorsString = ''.join(self.separators)
+            # Initialize variables to store tokens
+            tokens = []
+            local_word = ""
+            in_quoted_string = False
 
-            tokens = re.split(f'({re.escape(separatorsString)})', content)
+            # Process content character by character
+            for char in content:
+                if in_quoted_string:
+                    local_word += char
+                    if char == '"':
+                        in_quoted_string = False
+                elif char not in self.operators and char not in self.separators and char not in self.reservedWords:
+                    local_word += char  # If char is not in the operators, separators, or reserved words, we add it to form the word
+                else:
+                    if local_word:
+                        tokens.append(local_word)  # Add the word
+                        local_word = ""
+                    if char == '"':
+                        local_word = '"'
+                        in_quoted_string = True
+                    elif char.strip() or char in self.operators or char in self.separators or char in self.reservedWords:
+                        tokens.append(char)  # Add the separator, even if the word is empty
 
-            # Filter out empty strings and spaces
-            print(tokens)
-            tokens = [token for token in tokens if token.strip()]
-            print(tokens)
-            return self.tokenize(tokens)
+            # If there's any remaining word after processing the content
+            if local_word:
+                tokens.append(local_word)
+
+            # Filter out '\n' strings
+            tokens = [token for token in tokens if token != '\n']
+
+            return tokens
+
         except FileNotFoundError as e:
             print(e)
 
         return None
 
-    def tokenize(self, tokens_to_be):
-        resulted_tokens = []
-        is_string_constant = False
-        is_char_constant = False
-        created_string = []
-        number_line = 1
-        number_column = 1
-
-        for t in tokens_to_be:
-            if t == '"':
-                if is_string_constant:
-                    created_string.append(t)
-                    resulted_tokens.append(("".join(created_string), (number_line, number_column)))
-                    created_string = []
-                else:
-                    created_string.append(t)
-                is_string_constant = not is_string_constant
-            elif t == "'":
-                if is_char_constant:
-                    created_string.append(t)
-                    resulted_tokens.append(("".join(created_string), (number_line, number_column)))
-                    created_string = []
-                else:
-                    created_string.append(t)
-                is_char_constant = not is_char_constant
-            elif t == "\n":
-                number_line += 1
-                number_column = 1
-            else:
-                if is_string_constant:
-                    created_string.append(t)
-                elif is_char_constant:
-                    created_string.append(t)
-                elif t.strip():  # Check if t is not just whitespace
-                    resulted_tokens.append((t, (number_line, number_column)))
-                    number_column += len(t)
-
-        return resulted_tokens
-
     def scan(self):
-        tokens = self.createListOfProgramElems()
-
+        tokens = self.getProgramTokens()
         lexical_error_exists = False
-        # constant (1), identifier (2), (3 - operator, 4 - separator , 5 - reserved word)
+        print(tokens)
         if tokens is None:
             return
 
         for t in tokens:
-            token = t[0]
-            line, column = t[1]
+            token = t
             if token in self.reservedWords:
-                self.pif.add((token, (-1, -1), 5))
+                self.pifOutput.append([token, "0"])
             elif token in self.operators:
-                self.pif.add((token, (-1, -1), 3))
+                self.pifOutput.append([token, "0"])
             elif token in self.separators:
-                self.pif.add((token, (-1, -1), 4))
-            elif re.match(r'^(0|[-+]?[1-9][0-9]*|\'[1-9]\'|\'[a-zA-Z]\'|\"[0-9]*[a-zA-Z ]*\")$', token):
-                self.constantST.insert(token)
-                self.pif.add(("CONST", self.constantST.getValueIndex(token), 1))
+                self.pifOutput.append([token, "0"])
+            elif re.match(r'^(0|[-+]?[1-9][0-9]*|\'[1-9]\'|\'[a-zA-Z]\'|\"[0-9]*[a-zA-Z ]*\"|".*\s*")$', token):
+                self.constantST.insert(token, self.constantST.__len__())
+                self.pifOutput.append([token, self.constantST.search(token)])
             elif re.match(r'^var[a-zA-Z][a-zA-Z0-9]*$', token):
-                self.identifiersST.insert(token)
-                self.pif.add(("IDENTIFIER", self.identifiersST.getValueIndex(token), 2))
+                self.identifiersST.insert(token, self.identifiersST.__len__())
+                self.pifOutput.append([token, self.identifiersST.search(token)])
             else:
-                print(f"Error at line: {line} and column: {column}, invalid token: {token}")
+                print(f"Invalid token: {token}")
                 lexical_error_exists = True
-
                 if not lexical_error_exists:
                     print("Program is lexically correct!")
 
+
+    def read_possible_tokens(self):
+        tokens = []
+        with open('token.in', 'r') as file:
+            for line in file:
+                line = line.strip()  # Remove leading/trailing whitespace
+                parts = line.split()  # Split the line into words
+                if len(parts) >= 2:
+                    number = int(parts[0])
+                    word = parts[1]
+                    tokens.append((number, word))
+        tokens.append((12, ' '))
+
+        return tokens
+
     def get_pif(self):
-        return self.pif
+        return self.pifOutput
 
     def get_constantST(self):
         return self.constantST

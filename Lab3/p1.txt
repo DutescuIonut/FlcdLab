@@ -5,7 +5,7 @@ int varc
 int varb
 StayHere ( vara )
 varb = 5
-Stayhere ( varc )
+StayHere ( varc )
 if ( vara >= varb )
     varb = vara
 if( varb >= varc )
@@ -19,7 +19,5 @@ if ( varb <= varc )
     varc = varb
 if ( varc <= vara )
     vara = varc
-ShowMe ( "Min is:", vara )
-
+ShowMe ( "    Min is:", vara )
 PainEndsHere 0
-

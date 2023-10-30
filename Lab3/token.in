@@ -1,107 +1,45 @@
-constant
-identifier
-A
-B
-C
-D
-E
-F
-G
-H
-I
-J
-K
-L
-M
-N
-O
-P
-Q
-R
-S
-T
-U
-V
-W
-X
-Y
-Z
-a
-b
-c
-d
-e
-f
-g
-h
-i
-j
-k
-l
-m
-n
-o
-p
-q
-r
-s
-t
-u
-v
-w
-x
-y
-z
-0
-1
-2
-3
-4
-5
-6
-7
-8
-9
-+
--
-*
-/
-%
-==
-<=
-<
->
->=
-!=
-=
-(
-)
-[
-]
-{
-}
-:
-;
-'
-
-'\n'
-array
-char
-const
-do
-else
-if
-int
-of
-program
-read
-string
-for
-while
-then
-var
-while
-HereWeGoAgain
-PainEndsHere
-ShowMe
-StayHere
+1 CONSTANT
+2 IDENTIFIER
+3 +
+4 -
+5 *
+6/
+7 %
+8 ==
+9 <=
+10 <
+11 >
+12 >=
+13 !=
+14 =
+15 (
+16 )
+17 [
+18 ]
+19 {
+20 }
+21 :
+22 ;
+23 '
+24
+25 '\n'
+26 array
+27 char
+28 const
+29 do
+30 else
+31 if
+32 int
+33 of
+34 program
+35 read
+36string
+37 for
+38 while
+39 then
+40 var
+41 while
+42 HereWeGoAgain
+43 PainEndsHere
+44 ShowMe
+45 StayHere

@@ -80,6 +80,21 @@ class HashTable:
         except KeyError:
             return False
 
+    def getValueIndex(self, elem):
+        index = self._hash(elem)
+
+        if self.table[index] is not None:
+            current = self.table[index]
+            position = 0
+
+            while current:
+                if current.key == elem:
+                    return (index, position)
+                current = current.next
+                position += 1
+
+        return None
+
 
 class ConstantsSymbolTable(HashTable):
     # Has HashTable's time complexities
@@ -92,6 +107,9 @@ class ConstantsSymbolTable(HashTable):
             return True
         except KeyError:
             return False
+
+    def getValueIndex(self, key):
+        return super().getValueIndex(key)
 
     def remove(self, key):
         super().remove(key)
@@ -108,6 +126,9 @@ class IdentifiersSymbolTable(HashTable):
             return True
         except KeyError:
             return False
+
+    def getValueIndex(self, key):
+        return super().getValueIndex(key)
 
     def remove(self, key):
         super().remove(key)

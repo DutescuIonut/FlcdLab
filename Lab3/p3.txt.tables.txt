@@ -1,7 +1,7 @@
 Constants table starts here:
-100: 0
-50: 2
 1: 3
+50: 2
+100: 0
 0: 1
 "THE SUM IS:": 4
 Identifiers table starts here:

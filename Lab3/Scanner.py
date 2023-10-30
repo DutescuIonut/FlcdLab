@@ -12,7 +12,7 @@ class Scanner:
         self.constantST = ConstantsSymbolTable(200)
         self.identifiersST = IdentifiersSymbolTable(200)
         self.pifOutput = []
-        self.allTokens = self.read_possible_tokens()
+
         self.filePath = filepath
 
     def readFile(self):
@@ -81,7 +81,7 @@ class Scanner:
                 self.pifOutput.append([newIndex,  "0"])
             elif token in self.operators:
                 newIndex = self.find_token_index(token)
-                self.pifOutput.append([newIndex, "0" ])
+                self.pifOutput.append([newIndex, "0"])
 
             elif token in self.separators:
                 newIndex = self.find_token_index(token)
@@ -90,12 +90,12 @@ class Scanner:
             elif re.match(r'^(0|[-+]?[1-9][0-9]*|\'[1-9]\'|\'[a-zA-Z]\'|\"[0-9]*[a-zA-Z ]*\"|".*\s*")$', token):
                 if self.constantST.search(token) == -2:
                     self.constantST.insert(token, self.constantST.__len__())
-                self.pifOutput.append([token, self.constantST.getPositionPair(token)])
+                self.pifOutput.append(["CONSTANT", self.constantST.getPositionPair(token)])
             elif re.match(r'^var[a-zA-Z][a-zA-Z0-9]*$', token):
                 if self.identifiersST.search(token) == -2:
                     self.identifiersST.insert(token, self.identifiersST.__len__())
 
-                self.pifOutput.append([token, self.identifiersST.getPositionPair(token)])
+                self.pifOutput.append(["IDENTIFIER", self.identifiersST.getPositionPair(token)])
             else:
                 print(f"Invalid token: {token} on line {counter}")
                 lexical_error_exists = True
@@ -103,19 +103,6 @@ class Scanner:
                     print("Program is lexically correct!")
 
 
-    def read_possible_tokens(self):
-        tokens = []
-        with open('token.in', 'r') as file:
-            for line in file:
-                line = line.strip()  # Remove leading/trailing whitespace
-                parts = line.split()  # Split the line into words
-                if len(parts) >= 2:
-                    number = int(parts[0])
-                    word = parts[1]
-                    tokens.append((number, word))
-        tokens.append((12, ' '))
-
-        return tokens
 
     def find_token_index(self, target_token):
         with open('token.in', 'r') as file:

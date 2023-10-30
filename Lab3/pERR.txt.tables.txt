@@ -2,5 +2,5 @@ Constants table starts here:
 5: 0
 0: 1
 Identifiers table starts here:
-vara: 1
 varb: 0
+vara: 1

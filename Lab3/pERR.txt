@@ -1,8 +1,8 @@
 HereWeGoAgain
 
 int varb
-StayHere ( vara )
-varb = varb + vara
+StayHere ( vara )  #
+varb = varb + vara   #
 varb = varb * 5
 ShowMe ( varb )
 ShowMe ( varb // vara )

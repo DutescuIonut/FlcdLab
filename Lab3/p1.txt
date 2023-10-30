@@ -3,7 +3,7 @@ HereWeGoAgain
 int vara
 int varc
 int varb
-StayHere ( vara )
+StayHere(vara)
 varb = 5
 StayHere ( varc )
 if ( vara >= varb )

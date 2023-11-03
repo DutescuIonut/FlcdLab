@@ -27,7 +27,7 @@ def run(file_path):
 
 if __name__ == "__main__":
     run("p1.txt")
-    run("p2.txt")
-    run("p3.txt")
-    run("pERR.txt")
+    # run("p2.txt")
+    # run("p3.txt")
+    # run("pERR.txt")
 

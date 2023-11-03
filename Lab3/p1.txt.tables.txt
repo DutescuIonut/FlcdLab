@@ -1,9 +1,9 @@
 Constants table starts here:
+0: 4
+5: 0
+"    Min is:": 3
 "Max is:": 1
 123: 2
-5: 0
-0: 4
-"    Min is:": 3
 Identifiers table starts here:
 varc: 1
 varb: 2

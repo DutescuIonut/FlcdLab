@@ -72,6 +72,7 @@ class Scanner:
         counter = 1
         if tokens is None:
             return
+
         for t in tokens:
             token = t
             if token == "\n":
@@ -85,17 +86,22 @@ class Scanner:
 
             elif token in self.separators:
                 newIndex = self.find_token_index(token)
-                self.pifOutput.append([newIndex, "0"])
+                if token == ' ':
+                    # Handle space case separately
+                    self.pifOutput.append([24, "0"])
+                else:
+                    self.pifOutput.append([newIndex, "0"])
 
             elif re.match(r'^(0|[-+]?[1-9][0-9]*|\'[1-9]\'|\'[a-zA-Z]\'|\"[0-9]*[a-zA-Z ]*\"|".*\s*")$', token):
                 if self.constantST.search(token) == -2:
                     self.constantST.insert(token, self.constantST.__len__())
-                self.pifOutput.append(["CONSTANT", self.constantST.getPositionPair(token)])
+                # Constants are always 1
+                self.pifOutput.append([1, self.constantST.getPositionPair(token)])
             elif re.match(r'^var[a-zA-Z][a-zA-Z0-9]*$', token):
                 if self.identifiersST.search(token) == -2:
                     self.identifiersST.insert(token, self.identifiersST.__len__())
-
-                self.pifOutput.append(["IDENTIFIER", self.identifiersST.getPositionPair(token)])
+                # Identifiers are always 2
+                self.pifOutput.append([2, self.identifiersST.getPositionPair(token)])
             else:
                 print(f"Invalid token: {token} on line {counter}")
                 lexical_error_exists = True

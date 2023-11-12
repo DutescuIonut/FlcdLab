@@ -1,0 +1,10 @@
+Constants table starts here:
+"Max is:": 1
+5: 0
+"    Min is:": 3
+0: 4
+123: 2
+Identifiers table starts here:
+vara: 0
+varb: 2
+varc: 1

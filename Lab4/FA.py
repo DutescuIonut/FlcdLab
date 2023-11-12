@@ -114,6 +114,6 @@ class FiniteAutomata:
             except ValueError:
                 print("Invalid input. Try again!")
 
-fa = FiniteAutomata("FAIntegerConstants.in")
-#fa = FiniteAutomata("FAIdentifier.in")
-fa.run()
+#fa = FiniteAutomata("FAIntegerConstants.in")
+fa = FiniteAutomata("FAIdentifier.in")
+#fa.run()

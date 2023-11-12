@@ -24,6 +24,12 @@ class FiniteAutomata:
             # Parse the 3rd line: the transitions
             self.transitions = self.separate_by_delimiter(next(file), ' ')
 
+            # Parse the 4th line: initial state
+            self.initial_state = next(file).strip()
+
+            # Parse the 5th line: final state
+            self.final_states = self.separate_by_delimiter(next(file), ' ')
+
 
 
     def print_menu(self):
@@ -57,23 +63,29 @@ class FiniteAutomata:
     def is_final_state(self, state):
         return state in self.final_states
 
-    def can_obtain_sequence(self, sequence_so_far, final_sequence, current_state):
-        if len(sequence_so_far) == len(final_sequence):
-            if sequence_so_far == final_sequence and self.is_final_state(current_state):
-                return True
-            return False
+    def can_obtain_sequence(self, final_sequence):
+        current_state = self.initial_state
 
-        answer = False
-        for transition in self.transitions:
-            if transition[0] == current_state and transition[1] == sequence_so_far[-1]:
-                answer = (answer or self.can_obtain_sequence(sequence_so_far + transition[3], final_sequence,
-                                                             transition[2]))
+        for char in final_sequence:
+            found_transition = False
 
-        return answer
+            for transition in self.transitions:
+
+                transition_parts = transition.split(';')
+
+                if transition_parts[0] == current_state and transition_parts[2] == char:
+                    current_state = transition_parts[1]
+                    found_transition = True
+                    break
+
+            if not found_transition:
+                return False
+
+        return self.is_final_state(current_state)
 
     def check_sequence(self):
         sequence = input("Enter your sequence to be checked:\n")
-        if self.can_obtain_sequence("", sequence, self.initial_state):
+        if self.can_obtain_sequence(sequence):
             print("Your sequence is accepted")
         else:
             print("Your sequence is NOT accepted")
@@ -102,6 +114,6 @@ class FiniteAutomata:
             except ValueError:
                 print("Invalid input. Try again!")
 
-#fa = FiniteAutomata("FAIdentifier.in")
 fa = FiniteAutomata("FAIntegerConstants.in")
+#fa = FiniteAutomata("FAIdentifier.in")
 fa.run()

@@ -53,7 +53,6 @@ class FiniteAutomata:
     def print_transitions(self):
         print(" ".join(self.transitions))
 
-
     def print_initial_state(self):
         print(self.initial_state)
 

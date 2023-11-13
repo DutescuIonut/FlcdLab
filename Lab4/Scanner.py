@@ -99,7 +99,7 @@ class Scanner:
                     self.constantST.insert(token, self.constantST.__len__())
                 # Constants are always 1
                 self.pifOutput.append([1, self.constantST.getPositionPair(token)])
-            elif self.integerConstantsFA.can_obtain_sequence(token):
+            elif self.integerConstantsFA.can_obtain_sequence(token): # Changed to work with FA
 
                 # Integer constants with FA
                 if self.constantST.search(token) == -2:

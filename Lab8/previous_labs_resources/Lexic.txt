@@ -1,0 +1,35 @@
+Alphabet:
+
+a. Upper (A-Z) and lower case letters (a-z) of the English alphabet
+b. Underline character '_';
+c. Decimal digits (0-9);
+
+Lexic:
+
+a.Special symbols, representing:
+
+- operators +, -, *, /, %  (arithmetic)
+            <, <=, ==, >=, >, != (relational)
+            = (assignment)
+- separators [, ], {, }, (, ), :, ;, ',', ' ', '\n'
+- reserved words:
+    array  char  const do else  if int of program string for while then var while
+     and or HereWeGoAgain(begin) PainEndsHere(return) ShowMe(write)  StayHere(read)
+
+b.identifiers
+
+  -a sequence of letters and  digits, such that it starts with var and the first character is a letter:
+    identifier = "var"letter | "var"letter{letter}{digit}
+    letter = "A" | "B" | ... | "Z" | "a" | "b" | ... | "z"
+    digit = "0" | "non_zero_digit"
+    non_zero_digit = "1" | "2" | ... | "9"
+
+c.constants
+
+    -int = [ "+" | "-" ] non_zero_digit {digit} | "0"
+            digit = "0" | "non_zero_digit"
+            non_zero_digit = "1" | "2" | ... | "9"
+            letter = "A" | "B" | ... | "Z" | "a" | "b" | ... | "z"
+    -char = "letter" | "digit"
+    -string = {char}
+

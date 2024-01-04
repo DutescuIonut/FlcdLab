@@ -1,0 +1,12 @@
+HereWeGoAgain
+
+array [ 100 ] of int varVector
+int vari
+int varSuma = 0
+for ( vari = 0 ; vari < 50 ; vari = vari + 1 )
+    StayHere ( varVector [ vari ] )
+for ( vari = 0 ; vari < 50 ; vari = vari + 1 )
+    varSuma = varSuma + varVector [ vari ]
+ShowMe ( "THE SUM IS:" , varSuma )
+
+PainEndsHere 0
